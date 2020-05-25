@@ -1,0 +1,15 @@
+[package]
+name = "svg_face"
+version = "0.1.0"
+authors = ["Dustin Carlino <dabreegster@gmail.com>"]
+edition = "2018"
+description = "Generates random SVG faces"
+repository = "https://github.com/dabreegster/svg_face"
+categories = ["multimedia::images"]
+license = "Apache-2.0"
+
+[dependencies]
+rand = "0.7.3"
+
+[dev-dependencies]
+rand_xorshift = "0.2.0"
