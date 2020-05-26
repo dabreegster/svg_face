@@ -7,6 +7,7 @@ description = "Generates random SVG faces"
 repository = "https://github.com/dabreegster/svg_face"
 categories = ["multimedia::images"]
 license = "Apache-2.0"
+readme = "README.md"
 
 [dependencies]
 rand = "0.7.3"
