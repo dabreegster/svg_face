@@ -3,7 +3,11 @@ use std::io::{Error, Write};
 
 // TODO More descriptive variable names
 // TODO Better colors
-// TODO Fix the viewport size / don't cut off the top and left
+// TODO Add descriptive IDs to the results
+
+// This is a rather hacky way to avoid chopping off the left and top of some results.
+const OFFSET_X: f64 = 300.0;
+const OFFSET_Y: f64 = 300.0;
 
 /// Generates a random face and renders it as an SVG string.
 ///
@@ -295,8 +299,8 @@ fn ellipse(
     writeln!(
         svg,
         r##"<ellipse cx="{}" cy="{}" rx="{}" ry="{}" {}/>"##,
-        cx,
-        cy,
+        cx + OFFSET_X,
+        cy + OFFSET_Y,
         rx,
         ry,
         style.render()
@@ -318,14 +322,14 @@ fn bezier(
     writeln!(
         svg,
         r##"<path d="M{},{} C{},{},{},{},{},{}" {}/>"##,
-        x1,
-        y1,
-        x2,
-        y2,
-        x3,
-        y3,
-        x4,
-        y4,
+        x1 + OFFSET_X,
+        y1 + OFFSET_Y,
+        x2 + OFFSET_X,
+        y2 + OFFSET_Y,
+        x3 + OFFSET_X,
+        y3 + OFFSET_Y,
+        x4 + OFFSET_X,
+        y4 + OFFSET_Y,
         style.render()
     )
 }
