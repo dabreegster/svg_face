@@ -13,3 +13,5 @@ fn main() -> std::io::Result<()> {
 ```
 
 ![face](face.svg)
+
+To try it yourself, run `git clone https://github.com/dabreegster/svg_face && cd svg_face && cargo run --example aface`.
