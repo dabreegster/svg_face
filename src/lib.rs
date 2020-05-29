@@ -56,6 +56,25 @@ pub fn generate_face<R: Rng>(svg: &mut dyn Write, rng: &mut R) -> Result<(), Err
     let nose_cx = rand(rng, 5.0, 120.0);
     let nose_cy = rand(rng, 0.0, 125.0);
 
+    // Palette
+    let black = (0, 0, 0);
+    let white = (255, 255, 255);
+
+    // Awesome color schemes lifted from https://github.com/anokhee/visual-synthesizer
+    let (hair_color, skin_color, eye_color, cheeks_color) = {
+        let (c1, c2, c3, c4) = match rng.gen_range(0, 7) {
+            0 => ("#2D333D", "#D8BE8E", "#101B1A", "#EC4F7E"),
+            1 => ("#191A1A", "#E5DAC5", "#101B1A", "#B03E60"),
+            2 => ("#6F8120", "#A1D1BB", "#101B1A", "#8D6E61"),
+            3 => ("#000000", "#B8B5C8", "#A3171F", "#A49FBD"),
+            4 => ("#AAB656", "#58421B", "#0A2A2A", "#614B4A"),
+            5 => ("#6F8120", "#A0C794", "#775B5C", "#8D6E61"),
+            6 => ("#374B72", "#77633F", "#3A233A", "#614B4A"),
+            _ => unreachable!(),
+        };
+        (from_hex(c1), from_hex(c2), from_hex(c3), from_hex(c4))
+    };
+
     // ???
     let width = 800.0;
     let height = 600.0;
@@ -66,15 +85,6 @@ pub fn generate_face<R: Rng>(svg: &mut dyn Write, rng: &mut R) -> Result<(), Err
         width * 2.0,
         height * 2.0
     )?;
-
-    // Palette
-    let black = (0, 0, 0);
-    let white = (255, 255, 255);
-
-    let hair_color = white;
-    let skin_color = white;
-    let eye_color = white;
-    let cheeks_color = black;
 
     let mut style = Style {
         fill: None,
@@ -212,23 +222,19 @@ pub fn generate_face<R: Rng>(svg: &mut dyn Write, rng: &mut R) -> Result<(), Err
 
     style.fill = None;
     style.stroke_width = 5.0;
-    style.stroke = Some((
-        if skin_color.0 > 45 {
-            skin_color.0 - 45
-        } else {
-            skin_color.0
-        },
-        if skin_color.1 > 45 {
-            skin_color.1 - 45
-        } else {
-            skin_color.1
-        },
-        if skin_color.2 > 45 {
-            skin_color.2 - 45
-        } else {
-            skin_color.2
-        },
-    ));
+    style.stroke = {
+        let (mut r, mut g, mut b) = skin_color;
+        if r > 45 {
+            r -= 45;
+        }
+        if g > 45 {
+            g -= 45;
+        }
+        if b > 45 {
+            b -= 45;
+        }
+        Some((r, g, b))
+    };
     bezier(
         svg,
         &style,
@@ -359,4 +365,12 @@ fn rand<R: Rng>(rng: &mut R, low: f64, high: f64) -> f64 {
     } else {
         rng.gen_range(high, low)
     }
+}
+
+fn from_hex(raw: &str) -> (u8, u8, u8) {
+    // Skip the leading '#'
+    let r = u8::from_str_radix(&raw[1..3], 16).unwrap();
+    let g = u8::from_str_radix(&raw[3..5], 16).unwrap();
+    let b = u8::from_str_radix(&raw[5..7], 16).unwrap();
+    (r, g, b)
 }
