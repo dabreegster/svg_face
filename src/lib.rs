@@ -62,7 +62,7 @@ pub fn generate_face<R: Rng>(svg: &mut dyn Write, rng: &mut R) -> Result<(), Err
 
     // Awesome color schemes lifted from https://github.com/anokhee/visual-synthesizer
     let (hair_color, skin_color, eye_color, cheeks_color) = {
-        let (c1, c2, c3, c4) = match rng.gen_range(0, 7) {
+        let (c1, c2, c3, c4) = match rng.gen_range(0..7) {
             0 => ("#2D333D", "#D8BE8E", "#101B1A", "#EC4F7E"),
             1 => ("#191A1A", "#E5DAC5", "#101B1A", "#B03E60"),
             2 => ("#6F8120", "#A1D1BB", "#101B1A", "#8D6E61"),
@@ -361,9 +361,9 @@ impl Style {
 
 fn rand<R: Rng>(rng: &mut R, low: f64, high: f64) -> f64 {
     if low <= high {
-        rng.gen_range(low, high)
+        rng.gen_range(low..high)
     } else {
-        rng.gen_range(high, low)
+        rng.gen_range(high..low)
     }
 }
 
